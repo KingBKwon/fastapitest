@@ -2,10 +2,15 @@ version: '3'
 
 services:
   fastapi:
-    build: .
+    build:
+      context: ./app
+      dockerfile: Dockerfile
     container_name: fastapi_app
-    ports:
-      - "8000:8000"
+    command: gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
+    restart: always
+    expose:
+      - "8000"
+
   nginx:
     image: nginx:latest
     container_name: nginx
